@@ -1,3 +1,4 @@
+import { SELECTORS } from './selectors-enum';
 import puppeteer, { Puppeteer } from 'puppeteer';
 
 async function getSchedule(lineBus: string) {
@@ -7,7 +8,7 @@ async function getSchedule(lineBus: string) {
     waitUntil: 'networkidle2',
   });
 
-  await page.click('input[role="combobox"]')
+  await page.click(SELECTORS.INPUT_COMBOBOX);
 
   const id = await getElementId(lineBus, page)
   await page.click(`#${id}`);
@@ -21,7 +22,7 @@ getSchedule('12')
 
 
 async function getPositionLine(lineBus: string, page: puppeteer.Page):Promise<number | undefined> {
-  const position = await page.$$eval('.route-short-name', (elements, lineBus: any) => {
+  const position = await page.$$eval(SELECTORS.OPTIONS_COMBOBOX_LINE_BUS_NUMBER, (elements, lineBus: any) => {
     console.log(lineBus)
     let positionElement = 0;
     for (const element of elements) {
@@ -45,7 +46,7 @@ async function getElementId(lineBus: string, page: puppeteer.Page) {
     throw new Error('line bus not found');
   }
 
-  const id = await page.$$eval('.ng-dropdown-panel-items.scroll-host > div > div', (elements, position: any) => {
+  const id = await page.$$eval(SELECTORS.OPTIONS_COMBOBOX_ELEMENT, (elements, position: any) => {
     return elements[position].id
   }, position);
 
