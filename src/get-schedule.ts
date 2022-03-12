@@ -73,16 +73,16 @@ async function getDailyHours(element: ElementHandle) {
   return await element.$$(SELECTORS.DAILY_HOURS);
 }
 
-function getDailyWeek(element: ElementHandle) {
-  const dailyWeek = element.$eval(SELECTORS.DAILY_WEEK, (element) => {
-    return element.innerHTML;
+async function getDailyWeek(element: ElementHandle) {
+  const dailyWeek = await element.$eval(SELECTORS.DAILY_WEEK, (element) => {
+    return element.textContent;
   })
 
   if (dailyWeek === undefined || dailyWeek === null) {
     throw new Error('daily week not found')
   }
 
-  return dailyWeek;
+  return dailyWeek.trim();
 }
 
 async function getHours(dailyHour: ElementHandle) {
