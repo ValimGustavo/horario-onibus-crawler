@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "tsc && node ./dist/get-schedule.js"
+    "start": "tsc && node ./dist/get-schedule.js",
+    "test": "jest -c jest.config.js --bail"
   },
   "keywords": [],
   "author": "",
