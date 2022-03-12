@@ -3,7 +3,7 @@ import puppeteer, { ElementHandle, Puppeteer } from 'puppeteer';
 import { Itinerary } from './interface/itinenary.interface';
 
 async function getSchedule(lineBus: string) {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   await page.goto('https://painel.mobilibus.com/bus2you/home?p=1b5ym', {
     waitUntil: 'networkidle2',
@@ -19,9 +19,7 @@ async function getSchedule(lineBus: string) {
 
   const list = await getItineraries(lineBus, page)
 
-  console.log(JSON.stringify(list, null, 2))
-
-  // await browser.close();
+  await browser.close();
 }
 
 getSchedule('12')
@@ -32,11 +30,9 @@ async function getPositionLine(lineBus: string, page: puppeteer.Page): Promise<n
   await page.waitForSelector(SELECTORS.OPTIONS_COMBOBOX_LINE_BUS_NUMBER)
 
   const position = await page.$$eval(SELECTORS.OPTIONS_COMBOBOX_LINE_BUS_NUMBER, (elements, lineBus: any) => {
-    console.log(lineBus)
     let positionElement = 0;
     for (const element of elements) {
       if (element.textContent?.trim().toLowerCase() === lineBus.trim().toLocaleLowerCase()) {
-        console.log(element);
         return positionElement;
       }
       positionElement++;
@@ -48,7 +44,6 @@ async function getPositionLine(lineBus: string, page: puppeteer.Page): Promise<n
 
 
 async function getElementId(lineBus: string, page: puppeteer.Page) {
-  console.log(lineBus)
   const position = await getPositionLine(lineBus, page);
 
   if (position === undefined) {
@@ -59,7 +54,6 @@ async function getElementId(lineBus: string, page: puppeteer.Page) {
     return elements[position].id
   }, position);
 
-  console.log(id)
   return id;
 }
 
@@ -73,7 +67,6 @@ async function getStartPoint(element: ElementHandle) {
   }
 
   return startPoint
-
 }
 
 async function getDailyHours(element: ElementHandle) {
@@ -103,8 +96,6 @@ async function getHours(dailyHour: ElementHandle) {
 async function getItineraries(lineBus: string, page: puppeteer.Page) {
 
   const containers = await page.$$(SELECTORS.ITINERARIES_CONTAINER);
-
-  console.log('containers', containers)
   const itineraries: Itinerary[] = [];
 
   for (const container of containers) {
@@ -132,7 +123,6 @@ async function extractItineraryToContainer(container: ElementHandle): Promise<It
       hours: await getHours(dailyHour)
     })
   }
-
 
   return itinerary;
 }
