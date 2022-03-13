@@ -16,7 +16,7 @@ export class ItineraryService {
     }
   }
 
-  getItineraries(startPointSearch: string) {
+  getItinerary(startPointSearch: string) {
     const [itineraryA, itineraryB] = this.lineBusData.itineraries;
 
     if (itineraryA.startPoint === startPointSearch) {
@@ -30,8 +30,12 @@ export class ItineraryService {
     throw new Error(`itinerary ${startPointSearch} to lineBus ${this.lineBusData.lineBus} not found`);
   }
 
-  setHoursIfNotHave(timer: Timer) {
-    let { dailyHour, hour } = timer;
+  setHoursIfNotHave(timer?: Timer) {
+
+    if(timer !== undefined){
+      return timer;
+    }
+    let dailyHour, hour;
     if (!hour) {
       hour = new Date();
     }
@@ -44,6 +48,32 @@ export class ItineraryService {
   }
 
   nextHour(itinerary:Itinerary, timer:Timer){
+    const itineraryByDay = itinerary.dailyHours.find(itineraryByDay => {
+      if(itineraryByDay.dailyWeek === timer.dailyHour){
+        return itineraryByDay;
+      }
+    })
 
+    if(itineraryByDay === undefined){
+      throw new Error(`itinerary ${itinerary.startPoint} to ${timer.dailyHour} not found`)
+    }
+
+    const hourSearch = this.formatHour(timer.hour)
+
+
+    for(const hour of itineraryByDay.hours){
+      if(hourSearch <= hour){
+        return hour
+      }
+    }
+
+    throw new Error('hour not found to itinerary')
+  }
+
+  //TODO: create new service to function
+  formatHour(hourDateFormat:Date){
+    const hour = hourDateFormat.getHours().toString().padStart(2,'0');
+    const minutes = hourDateFormat.getMinutes().toString().padStart(2, '0');
+    return `${hour}:${minutes}`
   }
 }
