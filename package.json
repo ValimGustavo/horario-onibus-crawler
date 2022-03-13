@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "start": "tsc --build && node ./dist/src/get-schedule.js",
+    "pretest": "tsc --build --clean",
     "test": "jest -c jest.config.js --bail"
   },
   "keywords": [],

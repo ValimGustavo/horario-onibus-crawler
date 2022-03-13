@@ -1,10 +1,20 @@
-﻿describe('first test', () => {
-    test('true', () => {
-        expect(true).toBe(true)
-    })
-    test('false', () => {
-        expect(true).toBe(false)
-    })
+﻿import { ItineraryService } from "../../src/services/Itinerary.service";
+
+describe('get next hour', () => {
+  test('get hour 05:27 to lineBus 12 in start point A', () => {
+    const hour = new Date('2022-03-12T05:26:00');
+    const dailyHour = 'DIAS ÚTEIS';
+    const startPoint = "Saída PONTO A";
+
+
+    const itineraryService = new ItineraryService(lineBusTest);
+    const timer =  itineraryService.setHoursIfNotHave({hour, dailyHour});
+    const itinerary = itineraryService.getItineraries(startPoint);
+
+    const nextHour = itineraryService.nextHour(itinerary, timer)
+
+    expect(nextHour).toBe('05:27')
+  })
 })
 
 

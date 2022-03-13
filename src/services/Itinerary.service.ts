@@ -36,7 +36,7 @@ export class ItineraryService {
       hour = new Date();
     }
 
-    if (!dailyHour) {
+    if (dailyHour === null || dailyHour === undefined) {
       dailyHour = this.getDailyWeek(hour.getDay())
     }
 
