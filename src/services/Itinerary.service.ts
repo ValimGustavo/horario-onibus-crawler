@@ -1,5 +1,5 @@
 ﻿import { Timer } from './../interface/timer.interface';
-import { Itinerary } from './../interface/itinenary.interface';
+import { Itinerary } from '../interface/itinerary.interface';
 import { LineBus } from './../interface/line-bus.interface';
 
 export class ItineraryService {
