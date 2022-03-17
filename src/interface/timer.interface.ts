@@ -1,4 +1,4 @@
 ﻿export interface Timer {
-    dailyHour: string,
+    dailyWeek: string,
     hour: Date
 }

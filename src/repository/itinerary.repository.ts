@@ -1,5 +1,6 @@
 ﻿import { LineBus } from './../interface/line-bus.interface';
 import { ItineraryPersistance } from '../persistance/itinerary-persistance.interface';
+import { Itinerary } from '../interface/itinerary.interface';
 
 export class ItineraryRepository implements ItineraryPersistance {
     private itineraryRepository

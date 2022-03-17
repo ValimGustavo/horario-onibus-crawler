@@ -35,27 +35,28 @@ export class ItineraryService {
     if(timer !== undefined){
       return timer;
     }
-    let dailyHour, hour;
+    let dailyWeek, hour;
     if (!hour) {
       hour = new Date();
     }
 
-    if (dailyHour === null || dailyHour === undefined) {
-      dailyHour = this.getDailyWeek(hour.getDay())
+    if (dailyWeek === null || dailyWeek === undefined) {
+      dailyWeek = this.getDailyWeek(hour.getDay())
     }
 
-    return {dailyHour, hour};
+    return {dailyWeek, hour};
   }
 
-  nextHour(itinerary:Itinerary, timer:Timer){
+  nextHour(startPoint:string, timer:Timer){
+    const itinerary = this.getItinerary(startPoint)
     const itineraryByDay = itinerary.dailyHours.find(itineraryByDay => {
-      if(itineraryByDay.dailyWeek === timer.dailyHour){
+      if(itineraryByDay.dailyWeek === timer.dailyWeek){
         return itineraryByDay;
       }
     })
 
     if(itineraryByDay === undefined){
-      throw new Error(`itinerary ${itinerary.startPoint} to ${timer.dailyHour} not found`)
+      throw new Error(`itinerary ${itinerary.startPoint} to ${timer.dailyWeek} not found`)
     }
 
     const hourSearch = this.formatHour(timer.hour)
@@ -70,6 +71,10 @@ export class ItineraryService {
     throw new Error('hour not found to itinerary')
   }
 
+  getStartPoints(): string[]{
+    const {itineraries} = this.lineBusData;
+    return [itineraries[0].startPoint,itineraries[1].startPoint]
+  }
   //TODO: create new service to function
   formatHour(hourDateFormat:Date){
     const hour = hourDateFormat.getHours().toString().padStart(2,'0');
