@@ -1,6 +1,6 @@
 import { SELECTORS } from '../enum/selectors.enum';
 import puppeteer, { ElementHandle, Puppeteer } from 'puppeteer';
-import { Itinerary } from '../interface/itinenary.interface';
+import { Itinerary } from '../interface/itinerary.interface';
 
 async function getSchedule(lineBus: string) {
   const browser = await puppeteer.launch({ headless: true });
